@@ -22,7 +22,7 @@ class CustomUserSerializer(UserSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'email', 'username', 
+        fields = ('id', 'email', 'username',
                   'first_name', 'last_name', 'is_subscribed')
 
     def get_is_subscribed(self, obj):
@@ -40,7 +40,7 @@ class CustomUserCreateSerializer(UserCreateSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'email', 'username', 
+        fields = ('id', 'email', 'username',
                   'first_name', 'last_name', 'password')
 
 
@@ -96,22 +96,23 @@ class GetRecipeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Recipe
-        fields = ('id', 'tags', 'author', 'ingredients', 
-                  'is_favorited', 'is_in_shopping_cart', 
+        fields = ('id', 'tags', 'author', 'ingredients',
+                  'is_favorited', 'is_in_shopping_cart',
                   'name', 'image', 'text', 'cooking_time')
 
     def get_is_favorited(self, obj):
         request = self.context.get('request')
         if request is None or request.user.is_anonymous:
             return False
-        return Favorite.objects.filter(user=request.user, 
+        return Favorite.objects.filter(user=request.user,
                                        recipe=obj.id).exists()
 
     def get_is_in_shopping_cart(self, obj):
         request = self.context.get('request')
         if request is None or request.user.is_anonymous:
             return False
-        return ShoppingCart.objects.filter(user=request.user, recipe=obj.id).exists()
+        return ShoppingCart.objects.filter(user=request.user,
+                                           recipe=obj.id).exists()
 
     def get_ingredients(self, obj):
         recipe = obj
@@ -158,17 +159,17 @@ class PostRecipeSerializer(serializers.ModelSerializer):
 
     def validate_ingredients(self, ingredients):
         if not ingredients:
-            raise exceptions.ValidationError('Должен быть хотя бы один ингредиент.')
+            raise exceptions.ValidationError('Минимум один ингредиент.')
 
         ingredients_id_list = [ingredient['id'] for ingredient in ingredients]
         for ingredient_id in ingredients_id_list:
             if ingredients_id_list.count(ingredient_id) > 1:
-                raise exceptions.ValidationError('У рецепта не может быть два одинаковых игредиента.')
+                raise exceptions.ValidationError('Два одинаковых игредиента.')
         return ingredients
 
     def validate_cooking_time(self, cooking_time):
         if cooking_time <= 0:
-            raise exceptions.ValidationError('Минимальное время приготовления 1 минута.')
+            raise exceptions.ValidationError('Минимум 1 минута.')
         return cooking_time
 
     def create(self, validated_data):
@@ -209,7 +210,8 @@ class PostRecipeSerializer(serializers.ModelSerializer):
             for ingredient in ingredients:
                 amount = ingredient['amount']
                 ingredient_instance = ingredient['id']
-                ingredient = get_object_or_404(Ingredient, pk=ingredient_instance)
+                ingredient = get_object_or_404(Ingredient,
+                                               pk=ingredient_instance)
 
                 RecipeIngredient.objects.update_or_create(
                     recipe=instance,
@@ -246,4 +248,5 @@ class SubscriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'email', 'username', 'first_name',
-                  'last_name', 'is_subscribed', 'recipes', "recipes", 'recipes_count')
+                  'last_name', 'is_subscribed', 'recipes',
+                  "recipes", 'recipes_count')
