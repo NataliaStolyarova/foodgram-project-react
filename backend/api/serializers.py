@@ -14,7 +14,7 @@ User = get_user_model()
 
 class CustomUserSerializer(UserSerializer):
     """
-    Кастомный сериализатор для эндпоинтов
+    Сериализатор для эндпоинтов
     me/, users/ и users/{id}/.
     """
 
@@ -22,7 +22,8 @@ class CustomUserSerializer(UserSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'email', 'username', 'first_name', 'last_name', 'is_subscribed')
+        fields = ('id', 'email', 'username', 
+                  'first_name', 'last_name', 'is_subscribed')
 
     def get_is_subscribed(self, obj):
         request = self.context.get('request')
@@ -33,13 +34,14 @@ class CustomUserSerializer(UserSerializer):
 
 class CustomUserCreateSerializer(UserCreateSerializer):
     """
-    Кастомный сериализатор для эндпоинта
+    Сериализатор для эндпоинта
     users/.
     """
 
     class Meta:
         model = User
-        fields = ('id', 'email', 'username', 'first_name', 'last_name', 'password')
+        fields = ('id', 'email', 'username', 
+                  'first_name', 'last_name', 'password')
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -94,14 +96,16 @@ class GetRecipeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Recipe
-        fields = ('id', 'tags', 'author', 'ingredients', 'is_favorited',
-                  'is_in_shopping_cart', 'name', 'image', 'text', 'cooking_time')
+        fields = ('id', 'tags', 'author', 'ingredients', 
+                  'is_favorited', 'is_in_shopping_cart', 
+                  'name', 'image', 'text', 'cooking_time')
 
     def get_is_favorited(self, obj):
         request = self.context.get('request')
         if request is None or request.user.is_anonymous:
             return False
-        return Favorite.objects.filter(user=request.user, recipe=obj.id).exists()
+        return Favorite.objects.filter(user=request.user, 
+                                       recipe=obj.id).exists()
 
     def get_is_in_shopping_cart(self, obj):
         request = self.context.get('request')
@@ -159,7 +163,7 @@ class PostRecipeSerializer(serializers.ModelSerializer):
         ingredients_id_list = [ingredient['id'] for ingredient in ingredients]
         for ingredient_id in ingredients_id_list:
             if ingredients_id_list.count(ingredient_id) > 1:
-                raise exceptions.ValidationError('У рецепка не может быть два одинаковых игредиента.')
+                raise exceptions.ValidationError('У рецепта не может быть два одинаковых игредиента.')
         return ingredients
 
     def validate_cooking_time(self, cooking_time):
