@@ -239,9 +239,6 @@ class SubscriptionSerializer(serializers.ModelSerializer):
     recipes_count = serializers.SerializerMethodField(read_only=True)
     is_subscribed = serializers.SerializerMethodField(read_only=True)
 
-    def get_recipes_count(self, obj):
-        return Recipe.objects.filter(author=obj).count()
-
     def get_is_subscribed(self, obj):
         return True
 
@@ -249,4 +246,4 @@ class SubscriptionSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'email', 'username', 'first_name',
                   'last_name', 'is_subscribed', 'recipes',
-                  "recipes", 'recipes_count')
+                  'recipes_count')

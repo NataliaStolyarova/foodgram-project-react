@@ -18,6 +18,12 @@ class RecipeAdmin(admin.ModelAdmin):
     list_filter = ('author__email', 'tags', 'name')
     search_fields = ('author__email', 'name',)
 
+    def get_queryset(self):
+        return Recipe.objects.select_related(
+            'author'
+        ).prefetch_related(
+            'tags', 'ingredients')
+
     @admin.display(description='Тэги')
     def get_tags(self, obj):
         list_ = [tag.name for tag in obj.tags.all()]

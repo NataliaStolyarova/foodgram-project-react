@@ -7,14 +7,12 @@ load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECRET_KEY = os.getenv('SECRET_KEY', default='secret-key')
+SECRET_KEY = os.getenv('SECRET_KEY', default='secret-key')
 
-# DEBUG = bool(os.getenv('DEBUG', ''))
+DEBUG = bool(os.getenv('DEBUG', ''))
 
-SECRET_KEY = 'qs^h06^2&amp;glz$!$e@m%3b(0o!t59)b)ca^%l+y%t7*0%78fe'
-DEBUG = True
-
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [os.getenv('CLOUD_IP'), os.getenv(
+    'LOCAL'), os.getenv('LOCALHOST')]
 
 AUTH_USER_MODEL = 'users.User'
 
@@ -27,14 +25,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'api',
-    'recipes',
-    'users',
+    'django_filters',
+    'django_cleanup.apps.CleanupConfig',
     'rest_framework',
     'rest_framework.authtoken',
     'djoser',
-    'django_filters',
-    'django_cleanup.apps.CleanupConfig',
+    'api',
+    'recipes',
+    'users'
 ]
 
 MIDDLEWARE = [
@@ -139,3 +137,5 @@ DJOSER = {
         'user': ['rest_framework.permissions.IsAuthenticated']
     }
 }
+
+PAGE_SIZE = 6

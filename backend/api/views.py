@@ -6,7 +6,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from django.contrib.auth import get_user_model
-from django.db.models import Sum
+from django.db.models import Count, Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 
@@ -57,12 +57,8 @@ class CustomUserViewSet(UserViewSet):
         serializer_class=SubscriptionSerializer
     )
     def subscriptions(self, request):
-        user = request.user
-        favorites = user.followers.all()
-        users_id = [favorite_instance.author.id
-                    for favorite_instance in favorites]
-        users = User.objects.filter(id__in=users_id)
-        paginated_queryset = self.paginate_queryset(users)
+        favorites = User.objects.filter(followings__user=self.request.user)
+        paginated_queryset = self.paginate_queryset(favorites)
         serializer = self.serializer_class(paginated_queryset, many=True)
         return self.get_paginated_response(serializer.data)
 
@@ -97,7 +93,7 @@ class CustomUserViewSet(UserViewSet):
 
 
 class FavoriteShoppingCartMixin:
-    """Миксин. Вынес общее для favorite и shopping_cart
+    """Миксин. Общие для favorite и shopping_cart
     http методы post и delete.
     """
 
@@ -125,11 +121,18 @@ class FavoriteShoppingCartMixin:
 class RecipeViewSet(viewsets.ModelViewSet, FavoriteShoppingCartMixin):
     """ViewSet для рецептов."""
 
-    queryset = Recipe.objects.all()
     permission_classes = [IsAuthorOrReadOnly]
     pagination_class = CustomPagination
     filter_backends = (DjangoFilterBackend,)
     filterset_class = CustomFilterForRecipes
+
+    def get_queryset(self):
+        return Recipe.objects.select_related(
+            'author'
+        ).prefetch_related(
+            'tags', 'ingredients').filter(
+            author=self.request.user).annotate(
+            recipes_count=Count('recipes'))
 
     def get_serializer_class(self):
         if self.action in ['list', 'retrieve']:
@@ -156,15 +159,8 @@ class RecipeViewSet(viewsets.ModelViewSet, FavoriteShoppingCartMixin):
             error_message = 'Рецепта нет в списке покупок.'
             return self.delete_method(ShoppingCart, pk, request, error_message)
 
-    @action(detail=False, methods=['GET'],
-            permission_classes=[IsAuthenticated])
-    def download_shopping_cart(self, request):
-        shopping_cart = ShoppingCart.objects.filter(user=request.user)
-        recipes_id = [item.recipe.id for item in shopping_cart]
-        ingredients = RecipeIngredient.objects.filter(
-            recipe__in=recipes_id).values('ingredient__name',
-                                          'ingredient__measurement_unit'
-                                          ).annotate(amount=Sum('amount'))
+    @staticmethod
+    def ingredients_to_txt(ingredients):
         final_list = 'Список покупок от Foodgram\n\n'
 
         for item in ingredients:
@@ -173,7 +169,20 @@ class RecipeViewSet(viewsets.ModelViewSet, FavoriteShoppingCartMixin):
             amount = item['amount']
             final_list += f'{ingredient_name} ({measurement_unit}) {amount}\n'
 
+        return final_list
+
+    @action(detail=False, methods=['GET'],
+            permission_classes=[IsAuthenticated])
+    def download_shopping_cart(self, request):
+
+        shopping_cart = ShoppingCart.objects.filter(user=request.user)
+        recipes_id = [item.recipe.id for item in shopping_cart]
+        ingredients = RecipeIngredient.objects.filter(
+            recipe__in=recipes_id).values('ingredient__name',
+                                          'ingredient__measurement_unit'
+                                          ).annotate(amount=Sum('amount'))
         filename = 'foodgram_shopping_list.txt'
+        final_list = self.ingredients_to_txt(ingredients)
         response = HttpResponse(final_list[:-1], content_type='text/plain')
         response['Content-Disposition'] = ('attachment;'
                                            ' filename={0}').format(filename)

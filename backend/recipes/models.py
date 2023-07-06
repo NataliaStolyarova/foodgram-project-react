@@ -75,14 +75,16 @@ class Recipe(models.Model):
     ingredients = models.ManyToManyField(
         Ingredient,
         through='RecipeIngredient',
+        related_name='recipes',
         verbose_name='Ингредиенты'
     )
     tags = models.ManyToManyField(
         Tag,
+        related_name='recipes',
         verbose_name='Теги'
     )
-    cooking_time = models.PositiveIntegerField(
-        'Время приготовдения в минутах',
+    cooking_time = models.PositiveSmallIntegerField(
+        'Время приготовления в минутах',
         validators=[
             MinValueValidator(
                 1, message='Минимальное время приготовления - 1 минута.'
@@ -109,19 +111,22 @@ class Recipe(models.Model):
 
 class RecipeIngredient(models.Model):
     """Модель для связи между рецептами и ингредиентами.
-    А также количество ингедиентов."""
+    А также количество ингедиентов.
+    """
 
     ingredient = models.ForeignKey(
         Ingredient,
         on_delete=models.CASCADE,
+        related_name='ingredient_in_recipe',
         verbose_name='Ингредиенты'
     )
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
+        related_name='ingredient_list',
         verbose_name='Рецепт'
     )
-    amount = models.PositiveIntegerField(
+    amount = models.PositiveSmallIntegerField(
         'Количество',
         validators=[MinValueValidator(1, message='Минимум 1 ингредиент')]
     )
@@ -140,13 +145,13 @@ class Favorite(models.Model):
 
     user = models.ForeignKey(
         User,
-        related_name='user_favorites',
+        related_name='favorites',
         on_delete=models.CASCADE,
         verbose_name='Пользователь'
     )
     recipe = models.ForeignKey(
         Recipe,
-        related_name='recipe_favorites',
+        related_name='favorites',
         on_delete=models.CASCADE,
         verbose_name='Рецепты'
     )
@@ -157,7 +162,7 @@ class Favorite(models.Model):
         constraints = [
             models.UniqueConstraint(
                 fields=['user', 'recipe'],
-                name='unique_favorite'
+                name='uq_user_recipe'
             )
         ]
 
@@ -188,7 +193,7 @@ class ShoppingCart(models.Model):
         constraints = [
             models.UniqueConstraint(
                 fields=['user', 'recipe'],
-                name='unique_shopping_cart'
+                name='uq_user_recipe_in_shopping_cart'
             )
         ]
 

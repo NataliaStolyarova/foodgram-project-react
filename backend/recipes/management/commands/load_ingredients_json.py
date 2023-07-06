@@ -11,10 +11,10 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         with open(f'{settings.BASE_DIR}/data/ingredients.json') as json_file:
             data = json.load(json_file)
-            for i in range(50):
-                index = random.randint(0, 1000)
+            for _ in range(50):
+                indx = random.randint(0, 1000)
                 db = Ingredient(
-                    name=data[index]['name'],
-                    measurement_unit=data[index]['measurement_unit']
+                    name=data[indx]['name'],
+                    measurement_unit=data[indx]['measurement_unit']
                 )
                 db.save()
