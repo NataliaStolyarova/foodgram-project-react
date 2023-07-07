@@ -13,8 +13,8 @@ User = get_user_model()
 
 
 class CustomUserSerializer(UserSerializer):
-    """
-    Сериализатор для эндпоинтов
+    """Сериализатор для эндпоинтов
+
     me/, users/ и users/{id}/.
     """
 
@@ -33,10 +33,7 @@ class CustomUserSerializer(UserSerializer):
 
 
 class CustomUserCreateSerializer(UserCreateSerializer):
-    """
-    Сериализатор для эндпоинта
-    users/.
-    """
+    """Сериализатор для эндпоинта users/."""
 
     class Meta:
         model = User
@@ -229,7 +226,8 @@ class PostRecipeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Recipe
-        exclude = ('created',)
+        fields = ('author', 'name', 'image',
+                  'text', 'ingredients', 'tags', 'cooking_time')
 
 
 class SubscriptionSerializer(serializers.ModelSerializer):

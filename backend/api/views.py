@@ -94,6 +94,7 @@ class CustomUserViewSet(UserViewSet):
 
 class FavoriteShoppingCartMixin:
     """Миксин. Общие для favorite и shopping_cart
+
     http методы post и delete.
     """
 
@@ -174,7 +175,6 @@ class RecipeViewSet(viewsets.ModelViewSet, FavoriteShoppingCartMixin):
     @action(detail=False, methods=['GET'],
             permission_classes=[IsAuthenticated])
     def download_shopping_cart(self, request):
-
         shopping_cart = ShoppingCart.objects.filter(user=request.user)
         recipes_id = [item.recipe.id for item in shopping_cart]
         ingredients = RecipeIngredient.objects.filter(
@@ -184,6 +184,5 @@ class RecipeViewSet(viewsets.ModelViewSet, FavoriteShoppingCartMixin):
         filename = 'foodgram_shopping_list.txt'
         final_list = self.ingredients_to_txt(ingredients)
         response = HttpResponse(final_list[:-1], content_type='text/plain')
-        response['Content-Disposition'] = ('attachment;'
-                                           ' filename={0}').format(filename)
+        response['Content-Disposition'] = f'attachment; filename={filename}'
         return response

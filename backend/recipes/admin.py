@@ -62,6 +62,11 @@ class FavoriteAdmin(admin.ModelAdmin):
         'recipe'
     )
 
+    def get_queryset(self):
+        return Favorite.objects.select_related(
+            'user', 'recipe'
+        )
+
 
 @admin.register(ShoppingCart)
 class ShoppingCartAdmin(admin.ModelAdmin):
@@ -70,3 +75,8 @@ class ShoppingCartAdmin(admin.ModelAdmin):
         'user',
         'recipe'
     )
+
+    def get_queryset(self):
+        return ShoppingCart.objects.select_related(
+            'user', 'recipe'
+        )

@@ -29,6 +29,11 @@ class FollowAdmin(admin.ModelAdmin):
     search_fields = ('author', 'user')
     list_filter = ('author', 'user')
 
+    def get_queryset(self):
+        return Follow.objects.select_related(
+            'user', 'author'
+        )
+
 
 admin.site.register(User)
 admin.site.register(Follow)

@@ -15,7 +15,7 @@ services:
       - ./.env
 
   backend:
-    image: nataliastolyarova/foodgram_backend_local
+    image: nataliastolyarova/foodgram_backend
     restart: always
     volumes:
       - static_value:/app/static/
@@ -26,7 +26,7 @@ services:
       - ./.env
 
   frontend:
-    image: nataliastolyarova/foodgram_frontend_local
+    image: nataliastolyarova/foodgram_frontend
     volumes:
       - ../frontend/:/app/result_build/
     depends_on:
