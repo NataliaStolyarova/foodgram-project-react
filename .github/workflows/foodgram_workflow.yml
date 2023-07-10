@@ -72,7 +72,7 @@ jobs:
       - build_and_push_backend_image_to_dockerhub
       - build_and_push_frontend_image_to_dockerhub
     steps:
-    - name: Run command to deploy
+      - name: Run command to deploy
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
