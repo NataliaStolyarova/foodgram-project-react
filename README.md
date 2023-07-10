@@ -119,3 +119,8 @@ sudo docker exec -it <имя_контейнера_backend> python manage.py load
 #### Документация по API будет доступна по адресу: http://server_ip/api/docs/
 
 #### Панель администрирования будет доступна по адресу: http://server_ip/admin/
+
+'''
+ip сервера 51.250.22.48
+данные администратора: semechkina.n@yandex.ru 2mdhbYPM
+'''
