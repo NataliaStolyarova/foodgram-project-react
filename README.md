@@ -49,7 +49,7 @@ DOCKER_PASSWORD
 HOST
 USER
 SSH_KEY
-PASSPHRASE
+SSH_PASSPHRASE
 DB_ENGINE
 DB_NAME
 POSTGRES_USER
@@ -103,16 +103,16 @@ docker push username/название_образа:latest
 ```
 #### На удаленном сервере перейдите в папку infra и выполните команду
 ```bash
-sudo docker-compose up -d --build
+sudo docker compose up -d --build
 ```
 ####  Выполните миграции, соберите статику, создайте админа и загрузите данные в базу данных
 
 ```bash
-sudo docker exec -it <имя_контейнера_backend> python manage.py migrate
-sudo docker exec -it <имя_контейнера_backend> python manage.py collectstatic
-sudo docker-compose exec <имя_контейнера_backend> python manage.py createsuperuser
-sudo docker exec -it <имя_контейнера_backend> python manage.py load_tags_json
-sudo docker exec -it <имя_контейнера_backend> python manage.py load_ingredients_csv
+sudo docker exec -it infra-backend-1 python manage.py migrate
+sudo docker exec -it infra-backend-1 python manage.py collectstatic
+sudo docker compose exec infra-backend-1 python manage.py createsuperuser
+sudo docker exec -it infra-backend-1 python manage.py load_tags_json
+sudo docker exec -it infra-backend-1 python manage.py load_ingredients_csv
 ```
 #### Сервис Foodgram будет доступен по адресу: http://server_ip
 
@@ -122,5 +122,5 @@ sudo docker exec -it <имя_контейнера_backend> python manage.py load
 
 '''
 ip сервера 51.250.22.48
-данные администратора: semechkina.n@yandex.ru 2mdhbYPM
+данные учетки администратора: semechkina.n@yandex.ru 2mdhbYPM
 '''
