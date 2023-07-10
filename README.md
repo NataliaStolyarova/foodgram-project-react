@@ -22,9 +22,6 @@ docker-compose -f docker-compose-local.yml up -d
 ```bash
 docker exec -it <имя> python manage.py migrate
 docker exec -it <имя> python manage.py collectstatic
-docker exec -it <имя> python manage.py createsuperuser
-docker exec -it <имя> python manage.py load_tags_json
-docker exec -it <имя> python manage.py load_ingredients_csv
 ```
 #### Создайте суперюзера и загрузите данные в базу данных
 ```bash
