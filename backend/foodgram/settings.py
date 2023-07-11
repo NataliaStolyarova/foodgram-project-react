@@ -9,7 +9,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY', default='secret-key')
 
-DEBUG = bool(os.getenv('DEBUG', ''))
+# DEBUG = bool(os.getenv('DEBUG', ''))
+DEBUG = True
 
 ALLOWED_HOSTS = [os.getenv('CLOUD_IP'), os.getenv(
     'LOCAL'), os.getenv('LOCALHOST')]

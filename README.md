@@ -78,20 +78,13 @@ sudo chmod +x /usr/local/bin/docker-compose
 
 sudo systemctl start docker.service && sudo systemctl enable docker.service
 ```
-#### Создайте папку infra и docs
-```bash
-cd ~
-mkdir infra
-mkdir docs
-```
-#### Перенесите файлы docker-compose.yml, nginx.conf и .env, openapi-chema.yml и redoc.html с вашего ПК на сервер.
+
+#### Перенесите файлы docker-compose.yml, nginx.conf и .env с вашего ПК на сервер.
 Не забудьте добавить ip сервера в server_name в файле с настройками nginx
 ```
-scp docker-compose.yml username@server_ip:/home/username/infra/
-scp nginx.conf username@server_ip:/home/username/infra/
-scp .env username@server_ip:/home/username/infra/
-scp openapi-chema.yml username@server_ip:/home/username/docs/
-scp redoc.html username@server_ip:/home/username/docs/
+scp docker-compose.yml username@server_ip:/home/username/foodgram/
+scp nginx.conf username@server_ip:/home/username/foodgram/
+scp .env username@server_ip:/home/username/foodgram/
 ```
 
 #### На своем ПК соберите образы для backend и frontend, запушьте их на DockerHub и измените docker-compose под свои образы.
@@ -101,18 +94,18 @@ docker login
 docker build -t username/название_образа:latest .
 docker push username/название_образа:latest
 ```
-#### На удаленном сервере перейдите в папку infra и выполните команду
+#### На удаленном сервере перейдите в папку foodgram и выполните команду
 ```bash
 sudo docker compose up -d --build
 ```
 ####  Выполните миграции, соберите статику, создайте админа и загрузите данные в базу данных
 
 ```bash
-sudo docker exec -it infra-backend-1 python manage.py migrate
-sudo docker exec -it infra-backend-1 python manage.py collectstatic
-sudo docker compose exec infra-backend-1 python manage.py createsuperuser
-sudo docker exec -it infra-backend-1 python manage.py load_tags_json
-sudo docker exec -it infra-backend-1 python manage.py load_ingredients_csv
+sudo docker exec -it foodgram-backend-1 python manage.py migrate
+sudo docker exec -it foodgram-backend-1 python manage.py collectstatic
+sudo docker exec -it foodgram-backend-1 python manage.py createsuperuser
+sudo docker exec -it foodgram-backend-1 python manage.py load_tags_json
+sudo docker exec -it foodgram-backend-1 python manage.py load_ingredients_csv
 ```
 #### Сервис Foodgram будет доступен по адресу: http://server_ip
 
