@@ -25,9 +25,9 @@ docker exec -it infra-backend-1 python manage.py collectstatic
 ```
 #### Создайте суперюзера и загрузите данные в базу данных
 ```bash
-docker exec -it <имя> python manage.py createsuperuser
-docker exec -it <имя> python manage.py load_tags_json
-docker exec -it <имя> python manage.py load_ingredients_csv
+docker exec -it infra-backend-1 python manage.py createsuperuser
+docker exec -it infra-backend-1 python manage.py load_tags_json
+docker exec -it infra-backend-1 python manage.py load_ingredients_csv
 ```
 
 #### Сервис Foodgram будет доступен по адресу в браузере: http://localhost/
