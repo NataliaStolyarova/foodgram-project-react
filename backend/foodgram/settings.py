@@ -13,8 +13,8 @@ SECRET_KEY = os.getenv('SECRET_KEY', default='secret-key')
 DEBUG = True
 
 ALLOWED_HOSTS = [os.getenv('CLOUD_IP'), os.getenv(
-    'LOCAL'), os.getenv('LOCALHOST')]
-# ALLOWED_HOSTS = ['*']
+    'LOCAL'), os.getenv('LOCALHOST'), 'backend']
+
 
 AUTH_USER_MODEL = 'users.User'
 
