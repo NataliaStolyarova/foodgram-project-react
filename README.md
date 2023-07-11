@@ -20,8 +20,8 @@ docker-compose -f docker-compose-local.yml up -d
 
 #### Выполните миграции и сбор статики
 ```bash
-docker exec -it <имя> python manage.py migrate
-docker exec -it <имя> python manage.py collectstatic
+docker exec -it infra-backend-1 python manage.py migrate
+docker exec -it infra-backend-1 python manage.py collectstatic
 ```
 #### Создайте суперюзера и загрузите данные в базу данных
 ```bash
