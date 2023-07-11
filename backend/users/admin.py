@@ -29,7 +29,7 @@ class FollowAdmin(admin.ModelAdmin):
     search_fields = ('author', 'user')
     list_filter = ('author', 'user')
 
-    def get_queryset(self):
+    def get_queryset(self, request):
         return Follow.objects.select_related(
             'user', 'author'
         )

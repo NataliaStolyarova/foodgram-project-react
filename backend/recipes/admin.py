@@ -18,7 +18,7 @@ class RecipeAdmin(admin.ModelAdmin):
     list_filter = ('author__email', 'tags', 'name')
     search_fields = ('author__email', 'name',)
 
-    def get_queryset(self):
+    def get_queryset(self, request):
         return Recipe.objects.select_related(
             'author'
         ).prefetch_related(
@@ -62,7 +62,7 @@ class FavoriteAdmin(admin.ModelAdmin):
         'recipe'
     )
 
-    def get_queryset(self):
+    def get_queryset(self, response):
         return Favorite.objects.select_related(
             'user', 'recipe'
         )
@@ -76,7 +76,7 @@ class ShoppingCartAdmin(admin.ModelAdmin):
         'recipe'
     )
 
-    def get_queryset(self):
+    def get_queryset(self, response):
         return ShoppingCart.objects.select_related(
             'user', 'recipe'
         )
