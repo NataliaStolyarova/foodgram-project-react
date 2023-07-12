@@ -61,8 +61,8 @@ class CustomUserViewSet(UserViewSet):
         # начало
         user = request.user
         favorites = user.followers.all()
-        users_id = [favorite_instance.author.id
-                    for favorite_instance in favorites]
+        # users_id = [favorite_instance.author.id
+        #             for favorite_instance in favorites]
         # users = User.objects.filter(id__in=users_id)
         # конец
         # favorites = User.objects.filter(followings__user=self.request.user)
