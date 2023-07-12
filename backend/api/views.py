@@ -57,7 +57,14 @@ class CustomUserViewSet(UserViewSet):
         serializer_class=SubscriptionSerializer
     )
     def subscriptions(self, request):
-        favorites = User.objects.filter(followings__user=self.request.user)
+        # начало
+        user = request.user
+        favorites = user.followers.all()
+        users_id = [favorite_instance.author.id
+                    for favorite_instance in favorites]
+        users = User.objects.filter(id__in=users_id)
+        # конец
+        # favorites = User.objects.filter(followings__user=self.request.user)
         paginated_queryset = self.paginate_queryset(favorites)
         serializer = self.serializer_class(paginated_queryset, many=True)
         return self.get_paginated_response(serializer.data)
@@ -122,18 +129,19 @@ class FavoriteShoppingCartMixin:
 class RecipeViewSet(viewsets.ModelViewSet, FavoriteShoppingCartMixin):
     """ViewSet для рецептов."""
 
+    queryset = Recipe.objects.all()  # добавлено
     permission_classes = [IsAuthorOrReadOnly]
     pagination_class = CustomPagination
     filter_backends = (DjangoFilterBackend,)
     filterset_class = CustomFilterForRecipes
 
-    def get_queryset(self):
-        return Recipe.objects.select_related(
-            'author'
-        ).prefetch_related(
-            'tags', 'ingredients').filter(
-            author=self.request.user).annotate(
-            recipes_count=Count('recipes'))
+    # def get_queryset(self):
+    #     return Recipe.objects.select_related(
+    #         'author'
+    #     ).prefetch_related(
+    #         'tags', 'ingredients').filter(
+    #         author=self.request.user).annotate(
+    #         recipes_count=Count('recipes'))
 
     def get_serializer_class(self):
         if self.action in ['list', 'retrieve']:
