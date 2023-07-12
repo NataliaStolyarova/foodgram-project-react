@@ -9,7 +9,6 @@ class RecipeAdmin(admin.ModelAdmin):
         'id',
         'author',
         'name',
-        'ingredients',  #
         'text',
         'cooking_time',
         'get_tags',
@@ -19,15 +18,15 @@ class RecipeAdmin(admin.ModelAdmin):
     list_filter = ('author__email', 'tags', 'name')
     search_fields = ('author__email', 'name',)
 
-    # def get_queryset(self):
-    #     return Recipe.objects.select_related(
-    #         'author'
-    #     ).prefetch_related(
-    #         'tags', 'ingredients')
-
     def get_queryset(self, response):
         return Recipe.objects.select_related(
-            'author')
+            'author'
+        ).prefetch_related(
+            'tags', 'ingredients')
+
+    # def get_queryset(self, response):
+    #     return Recipe.objects.select_related(
+    #         'author')
 
     @admin.display(description='Тэги')
     def get_tags(self, obj):
@@ -67,10 +66,10 @@ class FavoriteAdmin(admin.ModelAdmin):
         'recipe'
     )
 
-    # def get_queryset(self, response):
-    #     return Favorite.objects.select_related(
-    #         'user', 'recipe'
-    #     )
+    def get_queryset(self, response):
+        return Favorite.objects.select_related(
+            'user', 'recipe'
+        )
 
 
 @admin.register(ShoppingCart)
@@ -81,7 +80,7 @@ class ShoppingCartAdmin(admin.ModelAdmin):
         'recipe'
     )
 
-    # def get_queryset(self, response):
-    #     return ShoppingCart.objects.select_related(
-    #         'user', 'recipe'
-    #     )
+    def get_queryset(self, response):
+        return ShoppingCart.objects.select_related(
+            'user', 'recipe'
+        )
