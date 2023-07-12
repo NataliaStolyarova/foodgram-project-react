@@ -15,7 +15,6 @@ DEBUG = True
 ALLOWED_HOSTS = [os.getenv('CLOUD_IP'), os.getenv(
     'LOCAL'), os.getenv('LOCALHOST'), os.getenv('BACKEND')]
 
-
 AUTH_USER_MODEL = 'users.User'
 
 CSRF_TRUSTED_ORIGINS = ['http://localhost', 'http://localhost:8000', 'http://51.250.22.48']
