@@ -9,7 +9,7 @@ class RecipeAdmin(admin.ModelAdmin):
         'id',
         'author',
         'name',
-        'ingredients', #
+        'ingredients',  #
         'text',
         'cooking_time',
         'get_tags',
