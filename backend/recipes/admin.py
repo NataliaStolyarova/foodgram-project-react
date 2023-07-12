@@ -25,7 +25,7 @@ class RecipeAdmin(admin.ModelAdmin):
     #     ).prefetch_related(
     #         'tags', 'ingredients')
 
-    def get_queryset():
+    def get_queryset(self, response):
         return Recipe.objects.select_related(
             'author')
 
