@@ -24,6 +24,10 @@ class RecipeAdmin(admin.ModelAdmin):
     #     ).prefetch_related(
     #         'tags', 'ingredients')
 
+    def get_queryset(self):
+        return Recipe.objects.select_related(
+            'author')
+
     @admin.display(description='Тэги')
     def get_tags(self, obj):
         list_ = [tag.name for tag in obj.tags.all()]
