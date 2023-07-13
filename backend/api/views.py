@@ -140,7 +140,7 @@ class RecipeViewSet(viewsets.ModelViewSet, FavoriteShoppingCartMixin):
         return Recipe.objects.select_related(
             'author'
         ).prefetch_related(
-            'tags', 'ingredients')
+            'tags', 'ingredients').all()
         # .filter(
         #     author=request.user).annotate(
         #     recipes_count=Count('recipes'))
