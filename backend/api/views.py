@@ -6,8 +6,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from django.contrib.auth import get_user_model
-# from django.db.models import Count, Sum
-from django.db.models import Sum
+from django.db.models import Count, Sum
+# from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 
@@ -47,9 +47,15 @@ class IngredientViewSet(ListRetrieveMixin):
 class CustomUserViewSet(UserViewSet):
     """ViewSet для пользователей."""
 
-    queryset = User.objects.all()
+    # queryset = User.objects.all()
     serializer_class = CustomUserSerializer
     pagination_class = CustomPagination
+
+    def get_queryset(self):
+        queryset = User.objects.all().filter(
+            author=self.request.user
+        ).annotate(recipes_count=Count('recipe'))
+        return queryset
 
     @action(
         detail=False,
@@ -58,16 +64,8 @@ class CustomUserViewSet(UserViewSet):
         serializer_class=SubscriptionSerializer
     )
     def subscriptions(self, request):
-        # начало
-        # user = request.user
-        # favorites = user.followers.all()
-        # users_id = [favorite_instance.author.id
-        #             for favorite_instance in favorites]
-        # users = User.objects.filter(id__in=users_id)
-        # конец
         favorites = User.objects.filter(followings__user=self.request.user)
         paginated_queryset = self.paginate_queryset(favorites)
-        # paginated_queryset = self.paginate_queryset(users)
         serializer = self.serializer_class(paginated_queryset, many=True)
         return self.get_paginated_response(serializer.data)
 
@@ -141,8 +139,6 @@ class RecipeViewSet(viewsets.ModelViewSet, FavoriteShoppingCartMixin):
             'author'
         ).all().prefetch_related(
             'tags', 'ingredients')
-        # ).annotate(
-        #     recipes_count=Count('recipes'))
         return queryset
 
     def get_serializer_class(self):
