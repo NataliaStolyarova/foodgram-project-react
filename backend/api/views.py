@@ -136,8 +136,9 @@ class RecipeViewSet(viewsets.ModelViewSet, FavoriteShoppingCartMixin):
     filter_backends = (DjangoFilterBackend,)
     filterset_class = CustomFilterForRecipes
 
-    def get_queryset(self, request):
-        return Recipe.objects.all()
+    def get_queryset(self):
+        queryset = Recipe.objects.all()
+        return queryset
         # return Recipe.objects.select_related(
         #     'author'
         # ).
