@@ -138,9 +138,10 @@ class RecipeViewSet(viewsets.ModelViewSet, FavoriteShoppingCartMixin):
 
     def get_queryset(self, request):
         return Recipe.objects.select_related(
-            'author'
-        ).prefetch_related(
-            'tags', 'ingredients').all()
+            'author').all()
+        # ).
+        # prefetch_related(
+        #     'tags', 'ingredients').all()
         # .filter(
         #     author=request.user).annotate(
         #     recipes_count=Count('recipes'))
