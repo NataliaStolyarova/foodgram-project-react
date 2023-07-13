@@ -161,7 +161,7 @@ class PostRecipeSerializer(serializers.ModelSerializer):
         ingredients_id_list = [ingredient['id'] for ingredient in ingredients]
         for ingredient_id in ingredients_id_list:
             if ingredients_id_list.count(ingredient_id) > 1:
-                raise exceptions.ValidationError('Два одинаковых игредиента.')
+                raise exceptions.ValidationError('Два одинаковых ингредиента.')
         return ingredients
 
     def validate_cooking_time(self, cooking_time):

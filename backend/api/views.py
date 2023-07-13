@@ -6,8 +6,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from django.contrib.auth import get_user_model
-# from django.db.models import Count, Sum
-from django.db.models import Sum
+from django.db.models import Count, Sum
+# from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 
@@ -130,19 +130,19 @@ class FavoriteShoppingCartMixin:
 class RecipeViewSet(viewsets.ModelViewSet, FavoriteShoppingCartMixin):
     """ViewSet для рецептов."""
 
-    queryset = Recipe.objects.all()  # добавлено
+    # queryset = Recipe.objects.all()  # добавлено
     permission_classes = [IsAuthorOrReadOnly]
     pagination_class = CustomPagination
     filter_backends = (DjangoFilterBackend,)
     filterset_class = CustomFilterForRecipes
 
-    # def get_queryset(self):
-    #     return Recipe.objects.select_related(
-    #         'author'
-    #     ).prefetch_related(
-    #         'tags', 'ingredients').filter(
-    #         author=self.request.user).annotate(
-    #         recipes_count=Count('recipes'))
+    def get_queryset(self, request):
+        return Recipe.objects.select_related(
+            'author'
+        ).prefetch_related(
+            'tags', 'ingredients').filter(
+            author=request.user).annotate(
+            recipes_count=Count('recipes'))
 
     def get_serializer_class(self):
         if self.action in ['list', 'retrieve']:
