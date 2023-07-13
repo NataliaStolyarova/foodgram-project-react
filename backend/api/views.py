@@ -140,9 +140,10 @@ class RecipeViewSet(viewsets.ModelViewSet, FavoriteShoppingCartMixin):
         return Recipe.objects.select_related(
             'author'
         ).prefetch_related(
-            'tags', 'ingredients').filter(
-            author=request.user).annotate(
-            recipes_count=Count('recipes'))
+            'tags', 'ingredients')
+        # .filter(
+        #     author=request.user).annotate(
+        #     recipes_count=Count('recipes'))
 
     def get_serializer_class(self):
         if self.action in ['list', 'retrieve']:
