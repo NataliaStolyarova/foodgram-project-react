@@ -235,6 +235,7 @@ class SubscriptionSerializer(serializers.ModelSerializer):
 
     recipes = ShortRecipeSerializer(many=True, read_only=True)
     # recipes_count = serializers.SerializerMethodField(read_only=True)
+    recipes_count = serializers.IntegerField()
     is_subscribed = serializers.SerializerMethodField(read_only=True)
 
     # @staticmethod
