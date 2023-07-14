@@ -6,8 +6,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from django.contrib.auth import get_user_model
-# from django.db.models import Count, Sum
-from django.db.models import Sum
+from django.db.models import Count, Sum
+# from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 
@@ -52,8 +52,8 @@ class CustomUserViewSet(UserViewSet):
 
     def get_queryset(self):
         queryset = User.objects.all().filter(
-            author=self.request.user)
-        # ).annotate(recipes_count=Count('recipe'))
+            author=self.request.user
+        ).annotate(recipes_count=Count('recipe'))
         return queryset
 
     @action(

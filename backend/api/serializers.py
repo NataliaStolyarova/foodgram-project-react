@@ -240,9 +240,7 @@ class SubscriptionSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_recipes_count(obj):
-        """Метод для получения количества рецептов"""
-
-        return obj.recipes.count()
+        return obj.recipes_count
 
     def get_is_subscribed(self, obj):
         return True
