@@ -234,13 +234,9 @@ class SubscriptionSerializer(serializers.ModelSerializer):
     """Сериализатор для подписок."""
 
     recipes = ShortRecipeSerializer(many=True, read_only=True)
-    recipes_count = serializers.SerializerMethodField(read_only=True)
-    # recipes_count = serializers.IntegerField()
+    # recipes_count = serializers.SerializerMethodField(read_only=True)
+    recipes_count = serializers.IntegerField(read_only=True)
     is_subscribed = serializers.SerializerMethodField(read_only=True)
-
-    @staticmethod
-    def get_recipes_count(obj):
-        return obj.recipes_count
 
     def get_is_subscribed(self, obj):
         return True
