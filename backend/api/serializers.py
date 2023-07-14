@@ -250,4 +250,4 @@ class SubscriptionSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'email', 'username', 'first_name',
                   'last_name', 'is_subscribed', 'recipes',
-                  'recipes.recipes_count')
+                  'recipes_count')
