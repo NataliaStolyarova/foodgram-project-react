@@ -235,7 +235,7 @@ class SubscriptionSerializer(serializers.ModelSerializer):
 
     recipes = ShortRecipeSerializer(many=True, read_only=True)
     # recipes_count = serializers.SerializerMethodField(read_only=True)
-    recipes_count = serializers.IntegerField()
+    # recipes_count = serializers.IntegerField()
     is_subscribed = serializers.SerializerMethodField(read_only=True)
 
     # @staticmethod
@@ -250,5 +250,4 @@ class SubscriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'email', 'username', 'first_name',
-                  'last_name', 'is_subscribed', 'recipes',
-                  'recipes_count')
+                  'last_name', 'is_subscribed', 'recipes',)  # 'recipes_count')
