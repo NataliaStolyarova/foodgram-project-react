@@ -7,7 +7,6 @@ from rest_framework.response import Response
 
 from django.contrib.auth import get_user_model
 from django.db.models import Count, Sum
-# from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 
@@ -47,6 +46,7 @@ class IngredientViewSet(ListRetrieveMixin):
 class CustomUserViewSet(UserViewSet):
     """ViewSet для пользователей."""
 
+    queryset = User.objects.all()
     serializer_class = CustomUserSerializer
     pagination_class = CustomPagination
 
