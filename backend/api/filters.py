@@ -1,6 +1,6 @@
 from django_filters import rest_framework
 
-from recipes.models import Ingredient, Recipe, Tag, Favorite, ShoppingCart
+from recipes.models import Ingredient, Recipe, Tag
 
 CHOICES_LIST = (
     ('0', 'False'),
@@ -33,32 +33,31 @@ class CustomFilterForRecipes(rest_framework.FilterSet):
         if self.request.user.is_anonymous:
             return Recipe.objects.none()
         # начало
-        favorites = Favorite.objects.filter(user=self.request.user)
-        recipes = [item.recipe.id for item in favorites]
-        if value == '1':
-            return queryset.filter(id__in=recipes)
-        if value == '0':
-            return queryset.exclude(id__in=recipes)
-
+        # favorites = Favorite.objects.filter(user=self.request.user)
+        # recipes = [item.recipe.id for item in favorites]
         # if value == '1':
-        #     user = self.request.user
-        #     return queryset.filter(favorites__user_id=user.id)
-        # return queryset
+        #     return queryset.filter(id__in=recipes)
+        # if value == '0':
+        #     return queryset.exclude(id__in=recipes)
+        if value == '1':
+            user = self.request.user
+            return queryset.filter(favorites__user_id=user.id)
+        return queryset
 
     def is_in_shopping_cart_method(self, queryset, name, value):
         if self.request.user.is_anonymous:
             return Recipe.objects.none()
         # начало
-        shopping_cart = ShoppingCart.objects.filter(user=self.request.user)
-        recipes = [item.recipe.id for item in shopping_cart]
-        if value == '1':
-            return queryset.filter(id__in=recipes)
-        if value == '0':
-            return queryset.exclude(id__in=recipes)
+        # shopping_cart = ShoppingCart.objects.filter(user=self.request.user)
+        # recipes = [item.recipe.id for item in shopping_cart]
         # if value == '1':
-        #     user = self.request.user
-        #     return queryset.filter(recipe_shopping_cart__user_id=user.id)
-        # return queryset
+        #     return queryset.filter(id__in=recipes)
+        # if value == '0':
+        #     return queryset.exclude(id__in=recipes)
+        if value == '1':
+            user = self.request.user
+            return queryset.filter(recipe_shopping_cart__user_id=user.id)
+        return queryset
 
     class Meta:
         model = Recipe

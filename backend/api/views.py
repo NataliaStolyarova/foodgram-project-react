@@ -46,7 +46,6 @@ class IngredientViewSet(ListRetrieveMixin):
 class CustomUserViewSet(UserViewSet):
     """ViewSet для пользователей."""
 
-    queryset = User.objects.all()
     serializer_class = CustomUserSerializer
     pagination_class = CustomPagination
 
