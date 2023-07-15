@@ -6,7 +6,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from django.contrib.auth import get_user_model
-from django.db.models import Count, Sum, Value
+from django.db.models import Count, Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 
@@ -49,18 +49,10 @@ class CustomUserViewSet(UserViewSet):
     serializer_class = CustomUserSerializer
     pagination_class = CustomPagination
 
-    # def get_queryset(self):
-    #     queryset = User.objects.all().filter(
-    #         author=self.request.user
-    #     ).annotate(recipes_count=Count('recipe'))
-    #     return queryset
     def get_queryset(self):
-        queryset = self.request.user.followers.select_related(
-            'followings'
-        ).prefetch_related(
-            'followings__recipe'
-        ).annotate(recipes_count=Count('followings__recipe'),
-                   is_subscribed=Value(True))
+        queryset = User.objects.all().filter(
+            author=self.request.user
+        ).annotate(recipes_count=Count('recipe'))
         return queryset
 
     @action(
@@ -70,7 +62,7 @@ class CustomUserViewSet(UserViewSet):
         serializer_class=SubscriptionSerializer
     )
     def subscriptions(self, request):
-        favorites = User.objects.filter(followings__user=self.request.user)
+        favorites = User.objects.filter(followings__first_name=self.request.username)
         paginated_queryset = self.paginate_queryset(favorites)
         serializer = self.serializer_class(paginated_queryset, many=True)
         return self.get_paginated_response(serializer.data)
