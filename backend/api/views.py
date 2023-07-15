@@ -62,8 +62,7 @@ class CustomUserViewSet(UserViewSet):
         serializer_class=SubscriptionSerializer
     )
     def subscriptions(self, request):
-        user = request.user
-        favorites = Follow.objects.filter(user=user)
+        favorites = User.objects.filter(followings__user=self.request.user)
         paginated_queryset = self.paginate_queryset(favorites)
         serializer = self.serializer_class(paginated_queryset, many=True)
         return self.get_paginated_response(serializer.data)
