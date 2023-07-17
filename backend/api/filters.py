@@ -1,3 +1,4 @@
+from django.db.models import BooleanField, ExpressionWrapper, Q
 from django_filters import rest_framework
 
 from recipes.models import Ingredient, Recipe, Tag
@@ -19,10 +20,10 @@ class CustomFilterForRecipes(rest_framework.FilterSet):
         method='is_in_shopping_cart_method',
         choices=CHOICES_LIST
     )
-    # author = rest_framework.NumberFilter(
-    #     field_name='author',
-    #     lookup_expr='exact'
-    # )
+    author = rest_framework.NumberFilter(
+        field_name='author',
+        lookup_expr='exact'
+    )
     tags = rest_framework.ModelMultipleChoiceFilter(
         field_name='tags__slug',
         to_field_name='slug',
@@ -53,8 +54,23 @@ class CustomFilterForRecipes(rest_framework.FilterSet):
 class CustomFilterForIngredients(rest_framework.FilterSet):
     """Кастомная фильтрация для ингредиентов."""
 
-    name = rest_framework.CharFilter(lookup_expr='istartswith')
+    # name = rest_framework.CharFilter(lookup_expr='istartswith')
+
+    # class Meta:
+    #     model = Ingredient
+    #     fields = ('name',)
+    name = rest_framework.filters.CharFilter(method='filter_name')
 
     class Meta:
         model = Ingredient
         fields = ('name',)
+
+    def filter_name(self, queryset, name, value):
+        return queryset.filter(
+            Q(name__istartswith=value) | Q(name__icontains=value)
+        ).annotate(
+            startswith=ExpressionWrapper(
+                Q(name__istartswith=value),
+                output_field=BooleanField()
+            )
+        ).order_by('-startswith')
