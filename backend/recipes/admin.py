@@ -1,12 +1,6 @@
 from django.contrib import admin
-from admin_auto_filters.filters import AutocompleteFilter
 
 from .models import Favorite, Ingredient, Recipe, ShoppingCart, Tag
-
-
-class IngredientsFilter(AutocompleteFilter):
-    title = 'Ingredient'
-    field_name = 'ingredients'
 
 
 @admin.register(Recipe)
@@ -22,7 +16,6 @@ class RecipeAdmin(admin.ModelAdmin):
     )
 
     search_fields = ('author__email', 'name',)
-    list_filter = [IngredientsFilter]
 
     def get_queryset(self, response):
         return Recipe.objects.select_related(
