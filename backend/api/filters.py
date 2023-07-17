@@ -59,7 +59,7 @@ class CustomFilterForIngredients(rest_framework.FilterSet):
     # class Meta:
     #     model = Ingredient
     #     fields = ('name',)
-    name = rest_framework.filters.CharFilter(method='filter_name')
+    name = rest_framework.CharFilter(method='filter_name')
 
     class Meta:
         model = Ingredient
