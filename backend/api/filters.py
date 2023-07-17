@@ -19,10 +19,10 @@ class CustomFilterForRecipes(rest_framework.FilterSet):
         method='is_in_shopping_cart_method',
         choices=CHOICES_LIST
     )
-    author = rest_framework.NumberFilter(
-        field_name='author',
-        lookup_expr='exact'
-    )
+    # author = rest_framework.NumberFilter(
+    #     field_name='author',
+    #     lookup_expr='exact'
+    # )
     tags = rest_framework.ModelMultipleChoiceFilter(
         field_name='tags__slug',
         to_field_name='slug',
