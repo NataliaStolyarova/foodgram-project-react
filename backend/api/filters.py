@@ -1,4 +1,4 @@
-from django.db.models import BooleanField, ExpressionWrapper, Q
+# from django.db.models import BooleanField, ExpressionWrapper, Q
 from django_filters import rest_framework
 
 from recipes.models import Ingredient, Recipe, Tag
@@ -54,23 +54,24 @@ class CustomFilterForRecipes(rest_framework.FilterSet):
 class CustomFilterForIngredients(rest_framework.FilterSet):
     """Кастомная фильтрация для ингредиентов."""
 
-    # name = rest_framework.CharFilter(lookup_expr='istartswith')
-
-    # class Meta:
-    #     model = Ingredient
-    #     fields = ('name',)
-    name = rest_framework.CharFilter(method='filter_name')
+    name = rest_framework.CharFilter(field_name='name',
+                                     lookup_expr='istartswith')
 
     class Meta:
         model = Ingredient
         fields = ('name',)
+    # name = rest_framework.CharFilter(method='filter_name')
 
-    def filter_name(self, queryset, name, value):
-        return queryset.filter(
-            Q(name__istartswith=value) | Q(name__icontains=value)
-        ).annotate(
-            startswith=ExpressionWrapper(
-                Q(name__istartswith=value),
-                output_field=BooleanField()
-            )
-        ).order_by('-startswith')
+    # class Meta:
+    #     model = Ingredient
+    #     fields = ('name',)
+
+    # def filter_name(self, queryset, name, value):
+    #     return queryset.filter(
+    #         Q(name__istartswith=value) | Q(name__icontains=value)
+    #     ).annotate(
+    #         startswith=ExpressionWrapper(
+    #             Q(name__istartswith=value),
+    #             output_field=BooleanField()
+    #         )
+    #     ).order_by('-startswith')
