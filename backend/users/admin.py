@@ -17,7 +17,6 @@ class UserAdmin(admin.ModelAdmin):
         'first_name',
         'last_name'
     )
-    search_fields = ('email', 'username', 'first_name', 'last_name')
 
 
 @admin.register(Follow)
@@ -27,7 +26,6 @@ class FollowAdmin(admin.ModelAdmin):
         'user',
         'author'
     )
-    search_fields = ('author', 'user')
 
     def get_queryset(self, request):
         return Follow.objects.select_related(

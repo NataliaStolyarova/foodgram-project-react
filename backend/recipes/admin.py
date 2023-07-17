@@ -15,8 +15,6 @@ class RecipeAdmin(admin.ModelAdmin):
         'get_favorite_count'
     )
 
-    search_fields = ('author__email', 'name',)
-
     def get_queryset(self, response):
         return Recipe.objects.select_related(
             'author'
@@ -50,7 +48,6 @@ class IngredientAdmin(admin.ModelAdmin):
         'name',
         'measurement_unit'
     )
-    search_fields = ('name',)
 
 
 @admin.register(Favorite)
