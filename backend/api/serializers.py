@@ -240,14 +240,6 @@ class SubscriptionSerializer(serializers.ModelSerializer):
     def get_is_subscribed(self, obj):
         return True
 
-    def get_recipes(self, obj):
-        limit = 3
-        queryset = Recipe.objects.filter(author=obj.author)
-        if limit:
-            queryset = queryset[:int(limit)]
-        serializer = ShortRecipeSerializer(queryset, read_only=True, many=True)
-        return serializer.data
-
     class Meta:
         model = User
         fields = ('id', 'email', 'username', 'first_name',
