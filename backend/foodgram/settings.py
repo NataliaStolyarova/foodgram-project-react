@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'django_cleanup.apps.CleanupConfig',
     'rest_framework',
     'rest_framework.authtoken',
+    'admin_auto_filters',
     'djoser',
     'api',
     'recipes',
