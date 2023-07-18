@@ -24,7 +24,7 @@ class UserAdmin(admin.ModelAdmin):
         'last_name'
     )
     search_fields = ('email', 'username')
-    list_filter = (UserFilter,)
+    list_filter = ('email', 'username')
 
 
 @admin.register(Follow)

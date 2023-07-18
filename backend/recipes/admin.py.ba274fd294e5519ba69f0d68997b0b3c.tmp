@@ -20,7 +20,7 @@ class RecipeAdmin(admin.ModelAdmin):
         'get_tags',
         'get_favorite_count'
     )
-    list_filter = (AuthorFilter,)
+    list_filter = [ArtistFilter]
 
     def get_queryset(self, response):
         return Recipe.objects.select_related(
