@@ -51,7 +51,7 @@ class CustomUserViewSet(UserViewSet):
 
     def get_queryset(self):
         queryset = User.objects.all().filter(
-            followings__user=self.request.user
+            followers__user=self.request.user
         ).annotate(recipes_count=Count('recipes'))
         return queryset
 
