@@ -16,7 +16,7 @@ from users.models import Follow
 
 from .filters import CustomFilterForIngredients, CustomFilterForRecipes
 from .mixins import ListRetrieveMixin
-from .pagination import CustomPagination
+from .pagination import CustomPagination, CustomFollowPagination
 from .permissions import IsAuthorOrReadOnly
 from .serializers import (CustomUserSerializer, GetRecipeSerializer,
                           IngredientSerializer, PostRecipeSerializer,
@@ -47,12 +47,10 @@ class CustomUserViewSet(UserViewSet):
     """ViewSet для пользователей."""
 
     serializer_class = CustomUserSerializer
-    pagination_class = CustomPagination
+    pagination_class = CustomFollowPagination
 
     def get_queryset(self):
-        queryset = User.objects.all().filter(
-            followers__user=self.request.user
-        ).annotate(recipes_count=Count('recipes'))
+        queryset = User.objects.all().annotate(recipes_count=Count('recipes'))
         return queryset
 
     @action(
