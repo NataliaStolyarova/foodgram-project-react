@@ -9,11 +9,6 @@ class AuthorFilter(AutocompleteFilter):
     field_name = 'author'
 
 
-# class RecipeNameFilter(AutocompleteFilter):
-#     title = 'Название рецепта'
-#     field_name = 'name'
-
-
 class TagFilter(AutocompleteFilter):
     title = 'Тег'
     field_name = 'tags'
@@ -30,7 +25,6 @@ class RecipeAdmin(admin.ModelAdmin):
         'get_tags',
         'get_favorite_count'
     )
-    # search_fields = ('name',)
     list_filter = (AuthorFilter, TagFilter)
 
     def get_queryset(self, response):

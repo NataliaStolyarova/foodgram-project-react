@@ -233,12 +233,20 @@ class PostRecipeSerializer(serializers.ModelSerializer):
 class SubscriptionSerializer(serializers.ModelSerializer):
     """Сериализатор для подписок."""
 
-    recipes = ShortRecipeSerializer(many=True, read_only=True)
+    # recipes = ShortRecipeSerializer(many=True, read_only=True)
     recipes_count = serializers.IntegerField(read_only=True)
     is_subscribed = serializers.SerializerMethodField(read_only=True)
 
     def get_is_subscribed(self, obj):
         return True
+
+    def get_recipes(self, obj):
+        limit = 3
+        queryset = Recipe.objects.filter(author=obj.author)
+        if limit:
+            queryset = queryset[:int(limit)]
+        serializer = ShortRecipeSerializer(queryset, read_only=True, many=True)
+        return serializer.data
 
     class Meta:
         model = User
