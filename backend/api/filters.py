@@ -3,7 +3,6 @@ from rest_framework.filters import SearchFilter
 
 from recipes.models import Recipe, Tag
 
-
 CHOICES_LIST = (
     ('0', 'False'),
     ('1', 'True')

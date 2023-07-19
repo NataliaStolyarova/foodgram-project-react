@@ -12,13 +12,11 @@ class UserAdmin(admin.ModelAdmin):
         'first_name',
         'last_name'
     )
-    list_editable = (
-        'username',
-        'first_name',
-        'last_name'
+    list_display_links = (
+        'email',
+        'username'
     )
     search_fields = ('email', 'username')
-    list_filter = ('email', 'username')
 
 
 @admin.register(Follow)
@@ -27,6 +25,10 @@ class FollowAdmin(admin.ModelAdmin):
         'pk',
         'user',
         'author'
+    )
+    list_display_links = (
+        'author',
+        'user'
     )
 
     def get_queryset(self, request):

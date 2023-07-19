@@ -28,7 +28,7 @@ class RecipeAdmin(admin.ModelAdmin):
     )
     list_display_links = ('name',)
     list_filter = (AuthorFilter, TagFilter)
-    search_fields = ('name',)
+    search_fields = ('author__email', 'name',)
 
     def get_queryset(self, response):
         return Recipe.objects.select_related(
