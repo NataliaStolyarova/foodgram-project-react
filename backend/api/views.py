@@ -40,7 +40,7 @@ class IngredientViewSet(ListRetrieveMixin):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
     permission_classes = [AllowAny]
-    filter_backends = (DjangoFilterBackend,)
+    filter_backends = (CustomFilterForIngredients,)
     filterset_class = CustomFilterForIngredients
     search_fields = ('^name',)
 
