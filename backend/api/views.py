@@ -63,8 +63,8 @@ class CustomUserViewSet(UserViewSet):
     )
     def subscriptions(self, request):
         user = request.user
-        favorites = User.objects.filter(followings__user=user
-                                        ).annotate(recipes_count=Count('recipes'))
+        favorites = User.objects.filter(
+            followings__user=user).annotate(recipes_count=Count('recipes'))
         paginated_queryset = self.paginate_queryset(favorites)
         serializer = self.serializer_class(paginated_queryset, many=True,
                                            context={'request': request})
