@@ -1,7 +1,6 @@
 from django_filters import rest_framework
 from rest_framework.filters import SearchFilter
 
-# from recipes.models import Ingredient, Recipe, Tag
 from recipes.models import Recipe, Tag
 
 
@@ -53,15 +52,6 @@ class CustomFilterForRecipes(rest_framework.FilterSet):
         fields = ('author', 'tags')
 
 
-# class CustomFilterForIngredients(rest_framework.FilterSet):
-#     """Кастомная фильтрация для ингредиентов."""
-
-#     name = rest_framework.CharFilter(field_name='name',
-#                                      lookup_expr='istartswith')
-
-#     class Meta:
-#         model = Ingredient
-#         fields = ('name',)
 class CustomFilterForIngredients(SearchFilter):
     """Кастомная фильтрация для ингредиентов."""
 
