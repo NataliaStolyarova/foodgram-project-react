@@ -69,6 +69,7 @@ class IngredientAdmin(admin.ModelAdmin):
         'measurement_unit'
     )
     list_display_links = ('name',)
+    search_fields = ('recipes__name',)
 
 
 @admin.register(Favorite)
